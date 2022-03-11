@@ -9,61 +9,92 @@
       <mat-card-content>
         <mat-form-field class="full-width">
           <input
+            type="text"
             matInput
             placeholder="Título"
-            name="titulo"
             formControlName="titulo"
+            minlength="2"
+            maxlength="256"
+            required
           />
+          <mat-error
+            *ngIf="validarService.hasErrorValidate(f.titulo, 'required')"
+            >Campo obrigatório!</mat-error
+          >
+          <mat-error
+            *ngIf="validarService.hasErrorValidate(f.titulo, 'minlength')"
+            >O campo precisa ter no mínimo 2 caracteres!</mat-error
+          >
+          <mat-error
+            *ngIf="validarService.hasErrorValidate(f.titulo, 'maxlength')"
+            >O campo precisa ter no máximo 256 caracteres!</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <input matInput placeholder="Link Foto" formControlName="urlFoto" />
+          <mat-error
+            *ngIf="validarService.hasErrorValidate(f.urlFoto, 'minlength')"
+            >O campo precisa ter no mínimo 10 caracteres!</mat-error
+          >
         </mat-form-field>
         <mat-form-field class="full-width">
           <input
             matInput
-            placeholder="Link Foto"
-            name="urlFoto"
-            formControlName="urlFoto"
-          />
-        </mat-form-field>
-        <mat-form-field class="full-width">
-          <input
-            matInput
+            readonly
+            (click)="picker.open()"
             [matDatepicker]="picker"
             placeholder="Data de Lançamento"
-            name="dtLancamento"
             formControlName="dtLancamento"
           />
           <mat-datepicker-toggle
             matSuffix
             [for]="picker"
           ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker #picker=""></mat-datepicker>
+          <mat-error
+            *ngIf="validarService.hasErrorValidate(f.dtLancamento, 'required')"
+            >Campo obrigatório!</mat-error
+          >
         </mat-form-field>
         <mat-form-field class="full-width">
           <textarea
             matInput
             placeholder="Descrição"
-            name="descricao"
             formControlName="descricao"
           ></textarea>
         </mat-form-field>
         <mat-form-field class="full-width">
           <input
+            name="nota"
+            type="number"
             matInput
             placeholder="Nota IMDb"
-            name="nota"
             formControlName="nota"
             min="0"
             max="10"
             step="0.1"
-            type="number"
           />
+          <mat-error *ngIf="validarService.hasErrorValidate(f.nota, 'required')"
+            >Campo obrigatório!</mat-error
+          >
+          <mat-error *ngIf="validarService.hasErrorValidate(f.nota, 'min')"
+            >O campo precisa ter no mínimo o valor 0!</mat-error
+          >
+          <mat-error *ngIf="validarService.hasErrorValidate(f.nota, 'max')"
+            >O campo precisa ter no máximo o valor 10!</mat-error
+          >
         </mat-form-field>
         <mat-form-field class="full-width">
           <input
+            type="text"
             matInput
             placeholder="Link IMDb"
-            name="urlImdb"
             formControlName="urlImdb"
           />
+          <mat-error
+            *ngIf="validarService.hasErrorValidate(f.urlImdb, 'minlength')"
+            >O campo precisa ter no mínimo 10 caracteres!</mat-error
+          >
         </mat-form-field>
         <mat-form-field class="full-width">
           <mat-select placeholder="Gênero" formControlName="genero">
@@ -75,13 +106,19 @@
             <mat-option value="Romance">Romance</mat-option>
             <mat-option value="Terror">Terror</mat-option>
           </mat-select>
+          <mat-error
+            *ngIf="validarService.hasErrorValidate(f.urlImdb, 'required')"
+            >O campo é obrigatório!</mat-error
+          >
         </mat-form-field>
       </mat-card-content>
       <mat-card-actions>
-        <button color="accent" mat-raised-button>Salvar</button>
+        <button color="accent" [disabled]="cadastro.invalid" mat-raised-button>
+          Salvar
+        </button>
         <button
-          color="warn"
           type="button"
+          color="warn"
           (click)="reiniciarForm()"
           mat-raised-button
         >
